@@ -1,0 +1,17 @@
+{
+    "name": "pkbpay/billings",
+    "description": "package for billing",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Pkbpay\\Billings\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tai.nv"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
