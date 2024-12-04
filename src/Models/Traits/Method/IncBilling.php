@@ -75,15 +75,15 @@ trait IncBilling
         $sale_guarantee = [];
         $this->is_edit = false;
         $additionSettings = $this->additionBilling();
-        $specialTypeIds = [50];
-        $saleGuaranteeId = 51;
+        $specialTypeIds = [50]; // その他値引き
+        $saleGuaranteeId = 51; // 売上保証適用
 
         foreach ($billing_details as $key => $billing_detail) {
             $additionItemFlg = ($billing_detail->contents_operation) ? true : false;
             $billing_detail->tax_rate_percent = $tax_rate_percent;
             $billing_detail->tax_included = $tax_included;
-            $costWithTax = $billing_detail->subtotal * $billing_detail->quantity;
-            $this->logDebug("costNoTax: {$costWithTax}");
+            $itemCostNoTax = $billing_detail->subtotal;
+            $itemCostTotalNoTax = $billing_detail->subtotal * $billing_detail->quantity;
             if ($is_recruit_free_plan) {
                 $individual_reward_amoun_change = $billing_detail->paymentReward ? $billing_detail->paymentReward->individual_reward_amoun_change : 0;
                 $subtotal = $billing_detail->subtotal * $billing_detail->quantity;
@@ -102,6 +102,7 @@ trait IncBilling
             ])) {
                 $this->sending_custommer = true;
             }
+            $costWithTax = $itemCostTotalNoTax * $tax_included;
 
             $showItemTotalFlg = 1;
             $this->sale_guarantee = false;
@@ -120,18 +121,18 @@ trait IncBilling
                     }
 
                     // the same with !$additionItemFlg
-                    $billing_detail->subtotal = roundNumber($billing_detail->subtotal / $tax_included);
-                    $this->logDebug("売上保証適用->subtotal: {$billing_detail->subtotal}");
+                    //$billing_detail->subtotal = roundNumber($billing_detail->subtotal / $tax_included);
+                    $this->logDebug("addition->subtotal: {$billing_detail->subtotal}");
                 }
             } else {
                 // 単価
-                $billing_detail->subtotal = roundNumber($billing_detail->subtotal / $tax_included);
+                //$billing_detail->subtotal = roundNumber($billing_detail->subtotal / $tax_included);
                 $this->logDebug("detail->subtotal: {$billing_detail->subtotal}");
             }
 
             if ($showItemTotalFlg) {
                 // 小計 = SUM(②金額（税別）)
-                $gSubTotal += $billing_detail->subtotal;
+                $gSubTotal += $itemCostTotalNoTax;
 
                 // SUM(税込額)
                 $gSubTotalTax += $costWithTax;
