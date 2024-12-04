@@ -10,11 +10,13 @@ use App\Models\PaymentItemModel;
 use App\Models\PaymentMgtModel;
 use App\Models\PaymentRewardsModel;
 use App\Services\Admin\TaxService;
+use Carbon;
 use Illuminate\Support\Facades\Log;
 
 trait IncPayment
 {
     public $_debugFlg = true;
+    public $_pVersion = 1;
 
     public function caculatePayment() {
         $roundType = 2; // 1: billing, 2: payment

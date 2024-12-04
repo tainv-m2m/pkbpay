@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 trait IncBilling
 {
     public $_debugFlg = true;
+    public $_bVersion = 1;
 
     public function additionBilling()
     {
